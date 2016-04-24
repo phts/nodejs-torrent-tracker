@@ -2,5 +2,12 @@
   "name": "nodejs-torrent-tracker",
   "version": "1.0.0",
   "author": "Phil Tsarik",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-typescript-compiler": "^1.0.1",
+    "gulp-watch": "^4.3.5",
+    "typescript": "^1.8.10",
+    "typings": "^0.8.1"
+  }
 }
