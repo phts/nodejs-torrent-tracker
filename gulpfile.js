@@ -1,12 +1,12 @@
 var gulp = require('gulp');
-var tsc  = require('gulp-typescript-compiler');
+var ts  = require('gulp-typescript');
+var tsProject = ts.createProject('tsconfig.json');
 
 gulp.task('default', ['compile']);
 
 gulp.task('compile', function () {
-  return gulp
-    .src('app/**/*.ts')
-    .pipe(tsc())
+  return tsProject.src()
+    .pipe(ts(tsProject))
     .pipe(gulp.dest('release'));
 });
 
