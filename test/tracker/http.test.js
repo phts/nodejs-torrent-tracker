@@ -1,6 +1,6 @@
 var assert = require('assert');
 var http = require('http');
-var t = require('../release/tracker')
+var t = require('../../release/tracker');
 
 describe('Tracker', function () {
   const PORT = 8787;
