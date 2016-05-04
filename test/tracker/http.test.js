@@ -1,4 +1,4 @@
-var assert = require('assert');
+var expect = require('chai').expect;
 var http = require('http');
 var t = require('../../release/tracker');
 
@@ -20,7 +20,7 @@ describe('Tracker', function () {
 
     it('has status 200', function (done) {
       http.get(URL, function (response) {
-        assert.equal(200, response.statusCode);
+        expect(response.statusCode).to.equal(200);
         done();
       });
     });
@@ -34,7 +34,7 @@ describe('Tracker', function () {
         });
 
         response.on('end', function () {
-          assert.equal('data end', data);
+          expect(data).to.equal('data end');
           done();
         });
       });
