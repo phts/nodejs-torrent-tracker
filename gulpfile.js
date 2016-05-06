@@ -15,6 +15,10 @@ gulp.task('watch', function () {
   gulp.watch('app/**/*.ts', ['compile']);
 });
 
+gulp.task('watch-test', function () {
+  gulp.watch('app/**/*.ts', ['test']);
+});
+
 gulp.task('test', ['compile'], function () {
   return gulp.src('test/**/*.test.js', {read: false})
     .pipe(mocha({reporter: 'spec'}));
