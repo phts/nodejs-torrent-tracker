@@ -1,5 +1,5 @@
 /// <reference path="../typings/main.d.ts" />
-var _ = require('lodash/core');
+import * as _ from 'lodash';
 
 export class TrackerService {
   private peers: Object;

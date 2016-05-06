@@ -1,5 +1,5 @@
 /// <reference path="../typings/main.d.ts" />
-import http = require('http');
+import * as http from 'http';
 
 export class Tracker {
   private server: http.Server;
