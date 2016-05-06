@@ -1,26 +1,22 @@
 /// <reference path="../typings/main.d.ts" />
-import * as _ from 'lodash';
+import TorrentStore from './torrent-store';
+import MemoryTorrentStore from './memory-torrent-store';
 
 export class TrackerService {
-  private torrents: Object;
+  private torrentStore: TorrentStore;
 
   constructor () {
-    this.torrents = {};
+    this.torrentStore = new MemoryTorrentStore();
   }
 
   announce (params) {
-    var torrent = this.getTorrent(params.infoHash);
-    torrent.peers[params.peerId] = {
+    this.torrentStore.savePeer(params.infoHash, {
       peerId: params.peerId,
       ip: params.ip,
       port: params.port
-    };
+    });
     return {
-      peers: _.values(this.torrents[params.infoHash].peers)
+      peers: this.torrentStore.getPeers(params.infoHash)
     };
-  }
-
-  private getTorrent(infoHash) {
-    return this.torrents[infoHash] = this.torrents[infoHash] || {peers: {}};
   }
 }
