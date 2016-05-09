@@ -1,7 +1,5 @@
-import * as _ from 'lodash';
 import TorrentStore from './torrent-store';
 import Torrent from './torrent';
-import Peer from './peer';
 
 export default class MemoryTorrentStore implements TorrentStore {
   private torrents: Object;
@@ -11,14 +9,10 @@ export default class MemoryTorrentStore implements TorrentStore {
   }
 
   getTorrent(infoHash: string) {
-    return this.torrents[infoHash] = this.torrents[infoHash] || {peers: {}};
+    return this.torrents[infoHash] || new Torrent(infoHash);
   }
 
-  getPeers(infoHash: string) {
-    return <Peer[]> _.values(this.getTorrent(infoHash).peers);
-  }
-
-  savePeer(infoHash: string, peer: Peer) {
-    this.getTorrent(infoHash).peers[peer.peerId] = peer;
+  saveTorrent(torrent: Torrent) {
+    this.torrents[torrent.getInfoHash()] = torrent;
   }
 }

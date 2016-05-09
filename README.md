@@ -7,4 +7,5 @@ BitTorrent tracker. My CDP project.
 * Nodejs
 * TypeScript
 * Mocha
+* Sinon
 * Gulp
