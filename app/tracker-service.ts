@@ -11,7 +11,7 @@ export class TrackerService {
     this.torrentStore = new MemoryTorrentStore();
   }
 
-  announce (params) {
+  announce (params: AnnounceParams) {
     var torrent = this.torrentStore.getTorrent(params.infoHash);
     torrent.setPeer({
       peerId: params.peerId,
