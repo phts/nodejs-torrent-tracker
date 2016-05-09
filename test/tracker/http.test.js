@@ -1,13 +1,13 @@
 var expect = require('chai').expect;
 var http = require('http');
-var t = require('../../release/tracker');
 
 describe('Tracker', function () {
   const PORT = 8787;
-  var tracker;
+  var Tracker = require('../../release/tracker').Tracker,
+    tracker;
 
   beforeEach(function () {
-    tracker = new t.Tracker();
+    tracker = new Tracker();
     tracker.start(PORT);
   });
 

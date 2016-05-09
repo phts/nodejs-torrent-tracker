@@ -1,15 +1,15 @@
 var expect = require('chai').expect;
-var t = require('../../release/tracker-service');
 var createRequestParams = require('../helpers/create-request-params');
 
 describe('TrackerService', function () {
-  var trackerService,
+  var TrackerService = require('../../release/tracker-service').TrackerService,
+    trackerService,
     output,
     params;
 
   beforeEach(function () {
     params = createRequestParams();
-    trackerService = new t.TrackerService();
+    trackerService = new TrackerService();
   });
 
   describe('#announce', function () {
