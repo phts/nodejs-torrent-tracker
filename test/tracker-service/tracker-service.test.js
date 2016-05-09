@@ -18,6 +18,12 @@ describe('TrackerService', function () {
     torrentStub.getPeers = function () {
       return 'peers';
     };
+    torrentStub.getComplete = function () {
+      return 'complete';
+    };
+    torrentStub.getIncomplete = function () {
+      return 'incomplete';
+    };
 
     memoryTorrentStoreStub = sinon.createStubInstance(MemoryTorrentStore);
     memoryTorrentStoreStub.getTorrent = function () {
@@ -34,7 +40,8 @@ describe('TrackerService', function () {
       params
         .withPeerId('myPeerId')
         .withIp('11.22.33.44')
-        .withPort(6666);
+        .withPort(6666)
+        .withLeft(27);
       output = trackerService.announce(params);
     });
 
@@ -42,16 +49,12 @@ describe('TrackerService', function () {
       expect(torrentStub.setPeer.callCount).to.equal(1);
     });
 
-    it('updates the peer\'s id', function () {
-      expect(torrentStub.setPeer.getCall(0).args[0]).to.include({peerId: 'myPeerId'});
-    });
-
-    it('updates the peer\'s ip', function () {
-      expect(torrentStub.setPeer.getCall(0).args[0]).to.include({ip: '11.22.33.44'});
-    });
-
-    it('updates the peer\'s port', function () {
-      expect(torrentStub.setPeer.getCall(0).args[0]).to.include({port: 6666});
+    ['peerId', 'ip', 'port', 'left'].forEach(function (testParam) {
+      it('updates the peer\'s ' + testParam, function () {
+        var expObj = {};
+        expObj[testParam] = params[testParam];
+        expect(torrentStub.setPeer.getCall(0).args[0]).to.include(expObj);
+      });
     });
 
     it('saves updated torrent', function () {
@@ -63,6 +66,18 @@ describe('TrackerService', function () {
     describe('[peers]', function () {
       it('contains a list of peers', function () {
         expect(output.peers).to.equal('peers');
+      });
+    });
+
+    describe('[complete]', function () {
+      it('contains a list of seeders', function () {
+        expect(output.complete).to.equal('complete');
+      });
+    });
+
+    describe('[incomplete]', function () {
+      it('contains a list of leechers', function () {
+        expect(output.incomplete).to.equal('incomplete');
       });
     });
   });

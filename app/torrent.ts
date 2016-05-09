@@ -14,11 +14,19 @@ export default class Torrent {
     return this.infoHash;
   }
 
-  getPeers() {
-    return _.values(this.peers);
+  getPeers(): Peer[] {
+    return <Peer[]> _.values(this.peers);
   }
 
   setPeer(peer: Peer) {
     this.peers[peer.peerId] = peer;
+  }
+
+  getComplete() {
+    return _.filter(this.getPeers(), x => x.left === 0).length;
+  }
+
+  getIncomplete() {
+    return _.reject(this.getPeers(), x => x.left === 0).length;
   }
 }

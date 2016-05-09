@@ -18,6 +18,10 @@ function createRequestParams () {
     withPort: function (port) {
       this.port = port;
       return this;
+    },
+    withLeft: function (left) {
+      this.left = left;
+      return this;
     }
   };
 }

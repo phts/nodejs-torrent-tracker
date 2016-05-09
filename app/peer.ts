@@ -1,7 +1,8 @@
 interface Peer {
   peerId: string,
   ip: string,
-  port: number
+  port: number,
+  left: number,
 }
 
 export default Peer;

@@ -16,12 +16,15 @@ export class TrackerService {
     torrent.setPeer({
       peerId: params.peerId,
       ip: params.ip,
-      port: params.port
+      port: params.port,
+      left: params.left,
     });
 
     this.torrentStore.saveTorrent(torrent);
     return {
-      peers: torrent.getPeers()
+      complete: torrent.getComplete(),
+      incomplete: torrent.getIncomplete(),
+      peers: torrent.getPeers(),
     };
   }
 }

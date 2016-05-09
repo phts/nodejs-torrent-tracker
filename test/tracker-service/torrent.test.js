@@ -3,16 +3,18 @@ var expect = require('chai').expect;
 
 describe('Torrent', function () {
   var Torrent = require('../../release/torrent').default,
-    torrent;
+    torrent,
+    result;
 
   describe('#getInfoHash', function () {
     var infoHash = 'expectedInfoHash';
     beforeEach(function () {
       torrent = new Torrent(infoHash);
+      result = torrent.getInfoHash();
     });
 
     it('returns infoHash value associated with this torrent', function () {
-      expect(torrent.getInfoHash()).to.equal(infoHash);
+      expect(result).to.equal(infoHash);
     });
   });
 
@@ -23,10 +25,11 @@ describe('Torrent', function () {
     describe('when this torrent has no peers', function () {
       beforeEach(function () {
         torrent.peers = {};
+        result = torrent.getPeers();
       });
 
       it('return an empty array', function () {
-        expect(torrent.getPeers()).to.eql([]);
+        expect(result).to.eql([]);
       });
     });
     describe('when this torrent has some peers', function () {
@@ -36,9 +39,10 @@ describe('Torrent', function () {
           peer2: {peerProp2: 'peerValue2'},
           peer3: {peerProp3: 'peerValue3'}
         };
+        result = torrent.getPeers();
       });
       it('returns an array with peer objects', function () {
-        expect(torrent.getPeers()).to.eql([
+        expect(result).to.eql([
           {peerProp1: 'peerValue1'},
           {peerProp2: 'peerValue2'},
           {peerProp3: 'peerValue3'}
@@ -47,7 +51,7 @@ describe('Torrent', function () {
     });
   });
 
-  describe('setPeer', function () {
+  describe('#setPeer', function () {
     beforeEach(function () {
       torrent = new Torrent('infohash');
     });
@@ -82,6 +86,68 @@ describe('Torrent', function () {
 
       it('updates its data', function () {
         expect(torrent.getPeers()).to.contain(newPeer);
+      });
+    });
+  });
+
+  describe("#getComplete", function() {
+    beforeEach(function () {
+      torrent = new Torrent('infohash');
+    });
+
+    describe("when torrent has no peers", function() {
+      beforeEach(function() {
+        result = torrent.getComplete();
+      });
+
+      it("returns zero", function() {
+        expect(result).to.equal(0);
+      });
+    });
+
+    describe("when torrent have some registered peers", function() {
+      beforeEach(function () {
+        torrent.setPeer({peerId: 'leecher1', left: 10});
+        torrent.setPeer({peerId: 'seeder1', left: 0});
+        torrent.setPeer({peerId: 'leecher2', left: 20});
+        torrent.setPeer({peerId: 'seeder2', left: 0});
+        torrent.setPeer({peerId: 'leecher3', left: 30});
+        result = torrent.getComplete();
+      });
+
+      it("returns an amount of seeders", function() {
+        expect(result).to.equal(2);
+      });
+    });
+  });
+
+  describe("#getIncomplete", function() {
+    beforeEach(function () {
+      torrent = new Torrent('infohash');
+    });
+
+    describe("when torrent has no peers", function() {
+      beforeEach(function() {
+        result = torrent.getIncomplete();
+      });
+
+      it("returns zero", function() {
+        expect(result).to.equal(0);
+      });
+    });
+
+    describe("when torrent have some registered peers", function() {
+      beforeEach(function () {
+        torrent.setPeer({peerId: 'leecher1', left: 10});
+        torrent.setPeer({peerId: 'seeder1', left: 0});
+        torrent.setPeer({peerId: 'leecher2', left: 20});
+        torrent.setPeer({peerId: 'seeder2', left: 0});
+        torrent.setPeer({peerId: 'leecher3', left: 30});
+        result = torrent.getIncomplete();
+      });
+
+      it("returns an amount of leecher", function() {
+        expect(result).to.equal(3);
       });
     });
   });
