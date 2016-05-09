@@ -9,3 +9,7 @@ BitTorrent tracker. My CDP project.
 * Mocha
 * Sinon
 * Gulp
+
+## Specs
+
+* https://wiki.theory.org/BitTorrentSpecification#Tracker_HTTP.2FHTTPS_Protocol
