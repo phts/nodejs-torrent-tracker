@@ -1,3 +1,5 @@
+var Event = require('../../release/event').default;
+
 function createRequestParams () {
   return {
     infoHash: '12345678901234567890',
@@ -21,6 +23,10 @@ function createRequestParams () {
     },
     withLeft: function (left) {
       this.left = left;
+      return this;
+    },
+    withEvent: function (event) {
+      this.event = Event[event];
       return this;
     }
   };

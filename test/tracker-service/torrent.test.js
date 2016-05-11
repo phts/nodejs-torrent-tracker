@@ -151,4 +151,35 @@ describe('Torrent', function () {
       });
     });
   });
+
+  describe('#removePeer', function () {
+    beforeEach(function () {
+      torrent = new Torrent('infohash');
+    });
+    describe('when the specified peer is not registered for the torrent', function () {
+      beforeEach(function () {
+        torrent.setPeer({peerId: 'regPeer', peerProps: 'peerProps'})
+        result = torrent.removePeer('notFoundPeer');
+      });
+
+      it('does nothing', function () {
+        expect(torrent.getPeers()).to.eql([
+          {peerId: 'regPeer', peerProps: 'peerProps'}
+        ]);
+      });
+    });
+    describe('when the specified peer is registered for the torrent', function () {
+      beforeEach(function () {
+        torrent.setPeer({peerId: 'regPeer1', peer1Props: 'peer1Props'})
+        torrent.setPeer({peerId: 'regPeer2', peer2Props: 'peer2Props'})
+        result = torrent.removePeer('regPeer1');
+      });
+
+      it('unregisters the peer from the torrent', function () {
+        expect(torrent.getPeers()).to.eql([
+          {peerId: 'regPeer2', peer2Props: 'peer2Props'}
+        ]);
+      });
+    });
+  });
 });

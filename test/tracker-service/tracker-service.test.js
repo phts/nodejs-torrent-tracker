@@ -36,49 +36,103 @@ describe('TrackerService', function () {
   });
 
   describe('#announce', function () {
+    function returnsObject() {
+      it('returns object', function () {
+        expect(output).to.be.an('object');
+      });
+
+      describe('[peers]', function () {
+        it('contains a list of peers', function () {
+          expect(output.peers).to.equal('peers');
+        });
+      });
+
+      describe('[complete]', function () {
+        it('contains a list of seeders', function () {
+          expect(output.complete).to.equal('complete');
+        });
+      });
+
+      describe('[incomplete]', function () {
+        it('contains a list of leechers', function () {
+          expect(output.incomplete).to.equal('incomplete');
+        });
+      });
+    }
+
+    function behavesLikeEventNotSpecified() {
+      it('sets peer\'s data only once', function () {
+        expect(torrentStub.setPeer.callCount).to.equal(1);
+      });
+
+      ['peerId', 'ip', 'port', 'left'].forEach(function (testParam) {
+        it('updates the peer\'s ' + testParam, function () {
+          var expObj = {};
+          expObj[testParam] = params[testParam];
+          expect(torrentStub.setPeer.getCall(0).args[0]).to.include(expObj);
+        });
+      });
+
+      it('saves updated torrent', function () {
+        expect(memoryTorrentStoreStub.saveTorrent.callCount).to.equal(1);
+        expect(memoryTorrentStoreStub.saveTorrent.calledAfter(torrentStub.setPeer)).to.be.true;
+        expect(memoryTorrentStoreStub.saveTorrent.calledWith(torrentStub)).to.be.true;
+      });
+    }
+
     beforeEach(function () {
       params
         .withPeerId('myPeerId')
         .withIp('11.22.33.44')
         .withPort(6666)
         .withLeft(27);
-      output = trackerService.announce(params);
     });
 
-    it('sets peer\'s data only once', function () {
-      expect(torrentStub.setPeer.callCount).to.equal(1);
-    });
+    describe("when `event` === stopped", function() {
+      beforeEach(function () {
+        params.withEvent('stopped');
+        output = trackerService.announce(params);
+      });
 
-    ['peerId', 'ip', 'port', 'left'].forEach(function (testParam) {
-      it('updates the peer\'s ' + testParam, function () {
-        var expObj = {};
-        expObj[testParam] = params[testParam];
-        expect(torrentStub.setPeer.getCall(0).args[0]).to.include(expObj);
+      returnsObject();
+
+      it('unregisters the peer from the torrent', function () {
+        expect(torrentStub.removePeer.callCount).to.equal(1);
+        expect(torrentStub.removePeer.calledWith('myPeerId')).to.be.true;
+      });
+
+      it('saves updated torrent', function () {
+        expect(memoryTorrentStoreStub.saveTorrent.callCount).to.equal(1);
+        expect(memoryTorrentStoreStub.saveTorrent.calledAfter(torrentStub.removePeer)).to.be.true;
+        expect(memoryTorrentStoreStub.saveTorrent.calledWith(torrentStub)).to.be.true;
       });
     });
 
-    it('saves updated torrent', function () {
-      expect(memoryTorrentStoreStub.saveTorrent.callCount).to.equal(1);
-      expect(memoryTorrentStoreStub.saveTorrent.calledAfter(torrentStub.setPeer)).to.be.true;
-      expect(memoryTorrentStoreStub.saveTorrent.calledWith(torrentStub)).to.be.true;
+    describe("when `event` is not specified", function () {
+      beforeEach(function () {
+        params.withEvent(undefined);
+        output = trackerService.announce(params);
+      });
+      returnsObject();
+      behavesLikeEventNotSpecified();
     });
 
-    describe('[peers]', function () {
-      it('contains a list of peers', function () {
-        expect(output.peers).to.equal('peers');
+    describe("when `event` === started", function () {
+      beforeEach(function () {
+        params.withEvent('started');
+        output = trackerService.announce(params);
       });
+      returnsObject();
+      behavesLikeEventNotSpecified();
     });
 
-    describe('[complete]', function () {
-      it('contains a list of seeders', function () {
-        expect(output.complete).to.equal('complete');
+    describe("when `event` === completed", function () {
+      beforeEach(function () {
+        params.withEvent('completed');
+        output = trackerService.announce(params);
       });
-    });
-
-    describe('[incomplete]', function () {
-      it('contains a list of leechers', function () {
-        expect(output.incomplete).to.equal('incomplete');
-      });
+      returnsObject();
+      behavesLikeEventNotSpecified();
     });
   });
 });

@@ -29,4 +29,8 @@ export default class Torrent {
   getIncomplete() {
     return _.reject(this.getPeers(), x => x.left === 0).length;
   }
+
+  removePeer(peerId: string) {
+    delete this.peers[peerId];
+  }
 }
