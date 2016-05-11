@@ -16,7 +16,7 @@ gulp.task('watch', function () {
 });
 
 gulp.task('watch-test', function () {
-  gulp.watch('app/**/*.ts', ['test']);
+  gulp.watch(['app/**/*.ts', 'test/**/*.js'], ['test']);
 });
 
 gulp.task('test', ['compile'], function () {
