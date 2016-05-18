@@ -4,7 +4,7 @@ var sinon = require('sinon');
 var createRequestParams = require('../helpers/create-request-params');
 
 describe('TrackerService', function () {
-  var TrackerService = require('../../release/tracker-service').TrackerService,
+  var TrackerService = require('../../release/tracker-service').default,
     MemoryTorrentStore = require('../../release/memory-torrent-store').default,
     Torrent = require('../../release/torrent').default,
     trackerService,

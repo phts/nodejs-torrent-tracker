@@ -5,7 +5,7 @@ import MemoryTorrentStore from './memory-torrent-store';
 import Torrent from './torrent';
 import Event from './event';
 
-export class TrackerService {
+export default class TrackerService {
   private torrentStore: TorrentStore;
 
   constructor () {
