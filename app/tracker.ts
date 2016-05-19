@@ -2,11 +2,15 @@
 import * as http from 'http';
 import * as url from 'url';
 import * as errors from './tracker-errors';
+import AnnounceParamsParser from './announce-params-parser';
+import TrackerService from './tracker-service';
 
 export class Tracker {
+  private service: TrackerService;
   private server: http.Server;
 
   constructor () {
+    this.service = new TrackerService();
     this.server = http.createServer();
     this.server.on('request', this.onRequest.bind(this));
   }
@@ -26,7 +30,10 @@ export class Tracker {
       if (request.method !== 'GET') {
         throw new errors.NotFoundError();
       }
-      if (u.pathname !== '/announce') {
+      if (u.pathname === '/announce') {
+        let params = new AnnounceParamsParser(u.query).parse();
+        this.service.announce(params);
+      } else {
         throw new errors.NotFoundError();
       }
     } catch (err) {

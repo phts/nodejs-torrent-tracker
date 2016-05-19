@@ -4,7 +4,7 @@ var http = require('http');
 
 describe('Tracker', function () {
   const PORT = 8787;
-  var Tracker = require('../release/tracker').Tracker,
+  var Tracker = require('../app/tracker').Tracker,
     tracker;
 
   beforeEach(function () {

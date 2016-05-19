@@ -6,9 +6,15 @@ var tsProject = ts.createProject('tsconfig.json');
 gulp.task('default', ['compile']);
 
 gulp.task('compile', function () {
-  return tsProject.src()
+  return gulp.src('app/**/*.ts')
     .pipe(ts(tsProject))
-    .pipe(gulp.dest('release'));
+    .pipe(gulp.dest('js/app'));
+});
+
+gulp.task('compile-tests', ['compile'], function () {
+  return gulp.src('test/**/*.ts')
+    .pipe(ts(tsProject))
+    .pipe(gulp.dest('js/test'));
 });
 
 gulp.task('watch', function () {
@@ -16,10 +22,10 @@ gulp.task('watch', function () {
 });
 
 gulp.task('watch-test', function () {
-  gulp.watch(['app/**/*.ts', 'test/**/*.js'], ['test']);
+  gulp.watch(['app/**/*.ts', 'test/**/*.ts'], ['test']);
 });
 
-gulp.task('test', ['compile'], function () {
-  return gulp.src('test/**/*.test.js', {read: false})
+gulp.task('test', ['compile-tests'], function () {
+  return gulp.src('js/test/**/*.test.js', {read: false})
     .pipe(mocha({reporter: 'spec'}));
 });

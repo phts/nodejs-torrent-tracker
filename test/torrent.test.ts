@@ -2,7 +2,7 @@
 var expect = require('chai').expect;
 
 describe('Torrent', function () {
-  var Torrent = require('../release/torrent').default,
+  var Torrent = require('../app/torrent').default,
     torrent,
     result;
 
