@@ -1,12 +1,12 @@
 'use strict';
 var expect = require('chai').expect;
 var sinon = require('sinon');
-var createRequestParams = require('../helpers/create-request-params');
+var createRequestParams = require('./helpers/create-request-params');
 
 describe('TrackerService', function () {
-  var TrackerService = require('../../release/tracker-service').default,
-    MemoryTorrentStore = require('../../release/memory-torrent-store').default,
-    Torrent = require('../../release/torrent').default,
+  var TrackerService = require('../release/tracker-service').default,
+    MemoryTorrentStore = require('../release/memory-torrent-store').default,
+    Torrent = require('../release/torrent').default,
     trackerService,
     torrentStub,
     memoryTorrentStoreStub,
