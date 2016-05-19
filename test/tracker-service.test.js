@@ -1,7 +1,7 @@
 'use strict';
 var expect = require('chai').expect;
 var sinon = require('sinon');
-var createRequestParams = require('./helpers/create-request-params');
+var createAnnounceParams = require('./helpers/create-announce-params');
 
 describe('TrackerService', function () {
   var TrackerService = require('../release/tracker-service').default,
@@ -30,7 +30,7 @@ describe('TrackerService', function () {
       return torrentStub;
     };
 
-    params = createRequestParams();
+    params = createAnnounceParams();
     trackerService = new TrackerService();
     trackerService.torrentStore = memoryTorrentStoreStub;
   });

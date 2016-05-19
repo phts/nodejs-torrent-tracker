@@ -1,6 +1,6 @@
 var Event = require('../../release/event').default;
 
-function createRequestParams () {
+function createAnnounceParams () {
   return {
     infoHash: '12345678901234567890',
     peerId: 'MockPeer',
@@ -32,4 +32,4 @@ function createRequestParams () {
   };
 }
 
-module.exports = createRequestParams;
+module.exports = createAnnounceParams;
