@@ -7,6 +7,7 @@ describe('TrackerService', function () {
   var TrackerService = require('../release/tracker-service').default,
     MemoryTorrentStore = require('../release/memory-torrent-store').default,
     Torrent = require('../release/torrent').default,
+    AnnounceParamsValidator = require('../release/announce-params-validator').default,
     trackerService,
     torrentStub,
     memoryTorrentStoreStub,
@@ -40,6 +41,10 @@ describe('TrackerService', function () {
       it('returns object', function () {
         expect(output).to.be.an('object');
       });
+    }
+
+    function returnsResponse() {
+      returnsObject();
 
       describe('[peers]', function () {
         it('contains a list of peers', function () {
@@ -56,6 +61,16 @@ describe('TrackerService', function () {
       describe('[incomplete]', function () {
         it('contains a list of leechers', function () {
           expect(output.incomplete).to.equal('incomplete');
+        });
+      });
+    }
+
+    function returnsError(message) {
+      returnsObject();
+
+      describe('[failure reason]', function () {
+        it('contains an error message', function () {
+          expect(output['failure reason']).to.equal(message);
         });
       });
     }
@@ -88,51 +103,70 @@ describe('TrackerService', function () {
         .withLeft(27);
     });
 
-    describe("when `event` === stopped", function() {
-      beforeEach(function () {
-        params.withEvent('stopped');
-        output = trackerService.announce(params);
+    describe("when parameters are valid", function() {
+      beforeEach(function() {
+        AnnounceParamsValidator.prototype.validate = function () {};
       });
 
-      returnsObject();
+      describe("when `event` === stopped", function() {
+        beforeEach(function () {
+          params.withEvent('stopped');
+          output = trackerService.announce(params);
+        });
 
-      it('unregisters the peer from the torrent', function () {
-        expect(torrentStub.removePeer.callCount).to.equal(1);
-        expect(torrentStub.removePeer.calledWith('myPeerId')).to.be.true;
+        returnsResponse();
+
+        it('unregisters the peer from the torrent', function () {
+          expect(torrentStub.removePeer.callCount).to.equal(1);
+          expect(torrentStub.removePeer.calledWith('myPeerId')).to.be.true;
+        });
+
+        it('saves updated torrent', function () {
+          expect(memoryTorrentStoreStub.saveTorrent.callCount).to.equal(1);
+          expect(memoryTorrentStoreStub.saveTorrent.calledAfter(torrentStub.removePeer)).to.be.true;
+          expect(memoryTorrentStoreStub.saveTorrent.calledWith(torrentStub)).to.be.true;
+        });
       });
 
-      it('saves updated torrent', function () {
-        expect(memoryTorrentStoreStub.saveTorrent.callCount).to.equal(1);
-        expect(memoryTorrentStoreStub.saveTorrent.calledAfter(torrentStub.removePeer)).to.be.true;
-        expect(memoryTorrentStoreStub.saveTorrent.calledWith(torrentStub)).to.be.true;
+      describe("when `event` is not specified", function () {
+        beforeEach(function () {
+          params.withEvent(undefined);
+          output = trackerService.announce(params);
+        });
+        returnsResponse();
+        behavesLikeEventNotSpecified();
+      });
+
+      describe("when `event` === started", function () {
+        beforeEach(function () {
+          params.withEvent('started');
+          output = trackerService.announce(params);
+        });
+        returnsResponse();
+        behavesLikeEventNotSpecified();
+      });
+
+      describe("when `event` === completed", function () {
+        beforeEach(function () {
+          params.withEvent('completed');
+          output = trackerService.announce(params);
+        });
+        returnsResponse();
+        behavesLikeEventNotSpecified();
       });
     });
 
-    describe("when `event` is not specified", function () {
-      beforeEach(function () {
-        params.withEvent(undefined);
+    describe("when parameters are not valid", function() {
+      var message = 'my error message';
+      beforeEach(function() {
+        AnnounceParamsValidator.prototype.validate = function () {
+          throw new Error(message);
+        };
         output = trackerService.announce(params);
       });
-      returnsObject();
-      behavesLikeEventNotSpecified();
+
+      returnsError(message);
     });
 
-    describe("when `event` === started", function () {
-      beforeEach(function () {
-        params.withEvent('started');
-        output = trackerService.announce(params);
-      });
-      returnsObject();
-      behavesLikeEventNotSpecified();
-    });
-
-    describe("when `event` === completed", function () {
-      beforeEach(function () {
-        params.withEvent('completed');
-        output = trackerService.announce(params);
-      });
-      returnsObject();
-      behavesLikeEventNotSpecified();
-    });
   });
 });

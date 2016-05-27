@@ -3,6 +3,8 @@ import TorrentStore from './torrent-store';
 import MemoryTorrentStore from './memory-torrent-store';
 import Torrent from './torrent';
 import Event from './event';
+import AnnounceParamsValidator from './announce-params-validator';
+import AnnounceResponse from './announce-response';
 
 export default class TrackerService {
   private torrentStore: TorrentStore;
@@ -11,14 +13,24 @@ export default class TrackerService {
     this.torrentStore = new MemoryTorrentStore();
   }
 
-  announce (params: AnnounceParams) {
-    var torrent = this.torrentStore.getTorrent(params.infoHash);
-    this._processEvent(params, torrent);
-    return {
-      complete: torrent.getComplete(),
-      incomplete: torrent.getIncomplete(),
-      peers: torrent.getPeers(),
-    };
+  announce(params: AnnounceParams): AnnounceResponse {
+    var torrent;
+    try {
+      new AnnounceParamsValidator(params).validate();
+
+      torrent = this.torrentStore.getTorrent(params.infoHash);
+      this._processEvent(params, torrent);
+
+      return {
+        complete: torrent.getComplete(),
+        incomplete: torrent.getIncomplete(),
+        peers: torrent.getPeers(),
+      };
+    } catch (err) {
+      return {
+        'failure reason': err.message
+      };
+    }
   }
 
   private _processEvent(params: AnnounceParams, torrent: Torrent) {
