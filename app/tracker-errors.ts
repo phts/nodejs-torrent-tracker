@@ -10,6 +10,7 @@ export class TrackerError extends Error {
 
 export class NotFoundError extends TrackerError {
   statusCode = 404;
+  message = 'Not found';
 }
 
 export class RequestParamsError extends TrackerError {
