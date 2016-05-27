@@ -1,5 +1,11 @@
 export class TrackerError extends Error {
   statusCode: number;
+  message: string;
+
+  constructor (message?: string) {
+    super(message);
+    this.message = message;
+  }
 }
 
 export class NotFoundError extends TrackerError {
