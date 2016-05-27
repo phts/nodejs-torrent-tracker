@@ -1,6 +1,8 @@
 {
-  "ambientDependencies": {
-    "lodash": "registry:dt/lodash#3.10.0+20160330154726",
-    "node": "registry:dt/node#4.0.0+20160423143914"
+  "dependencies": {
+    "lodash": "registry:npm/lodash#4.0.0+20160416211519"
+  },
+  "globalDependencies": {
+    "node-4": "registry:dt/node-4#4.0.0+20160524002506"
   }
 }

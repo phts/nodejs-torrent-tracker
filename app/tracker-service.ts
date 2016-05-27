@@ -1,4 +1,3 @@
-/// <reference path="../typings/main.d.ts" />
 import AnnounceParams from './announce-params';
 import TorrentStore from './torrent-store';
 import MemoryTorrentStore from './memory-torrent-store';
