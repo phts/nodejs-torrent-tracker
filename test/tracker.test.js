@@ -5,7 +5,7 @@ var http = require('http');
 
 describe('Tracker', function () {
   const PORT = 8787;
-  var Tracker = require('../release/tracker').Tracker,
+  var Tracker = require('../release/tracker').default,
     TrackerService = require('../release/tracker-service').default,
     bencode = require('bencode'),
     tracker,

@@ -11,7 +11,7 @@ interface TrackerOptions {
   verbose?: boolean;
 }
 
-export class Tracker {
+export default class Tracker {
   private DEFAULTS: TrackerOptions = {
     verbose: false,
   };
