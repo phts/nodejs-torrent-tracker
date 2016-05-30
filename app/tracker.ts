@@ -2,11 +2,16 @@
 import * as http from 'http';
 import * as url from 'url';
 import * as errors from './tracker-errors';
+import AnnounceGetRequestParams from './announce-get-request-params'
+import TrackerService from './tracker-service';
+import * as bencode from 'bencode';
 
 export class Tracker {
+  private service: TrackerService;
   private server: http.Server;
 
   constructor () {
+    this.service = new TrackerService();
     this.server = http.createServer();
     this.server.on('request', this.onRequest.bind(this));
   }
@@ -21,12 +26,16 @@ export class Tracker {
   }
 
   private onRequest(request: http.IncomingMessage, response: http.ServerResponse) {
-    var u = url.parse(request.url, true);
+    var u = url.parse(request.url, true),
+      data;
     try {
       if (request.method !== 'GET') {
         throw new errors.NotFoundError();
       }
-      if (u.pathname !== '/announce') {
+      if (u.pathname === '/announce') {
+        let params = new AnnounceGetRequestParams(u.query);
+        data = this.service.announce(params);
+      } else {
         throw new errors.NotFoundError();
       }
     } catch (err) {
@@ -35,7 +44,9 @@ export class Tracker {
       } else {
         response.statusCode = 500;
       }
+      data = err.message;
     }
-    response.end();
+    response.setHeader('Content-Type', 'text/plain');
+    response.end(bencode.encode(data));
   }
 }

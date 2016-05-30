@@ -15,6 +15,7 @@
     "typings": "^1.0.4"
   },
   "dependencies": {
+    "bencode": "^0.10.0",
     "lodash": "^4.11.2"
   },
   "scripts": {
