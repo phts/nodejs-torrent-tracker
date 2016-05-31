@@ -15,9 +15,9 @@ describe('Tracker', function () {
     sinon.stub(bencode, 'encode', function (data) {
       return 'encoded-'+data;
     });
-    TrackerService.prototype.announce = function() {
-      return new Error();
-    };
+  });
+  after(function () {
+    bencode.encode.restore();
   });
 
   beforeEach(function () {
@@ -80,9 +80,13 @@ describe('Tracker', function () {
 
     describe('when service worked properly', function () {
       beforeEach(function () {
-        TrackerService.prototype.announce = function() {
+        sinon.stub(TrackerService.prototype, 'announce', function() {
           return 'announce-result';
-        };
+        });
+      });
+
+      afterEach(function () {
+        TrackerService.prototype.announce.restore();
       });
 
       itHasStatus(200);
@@ -92,9 +96,13 @@ describe('Tracker', function () {
 
     describe('when service throws an unhandled error', function () {
       beforeEach(function () {
-        TrackerService.prototype.announce = function() {
+        sinon.stub(TrackerService.prototype, 'announce', function() {
           throw new Error('unhandled error message');
-        };
+        });
+      });
+
+      afterEach(function () {
+        TrackerService.prototype.announce.restore();
       });
 
       itHasStatus(500);

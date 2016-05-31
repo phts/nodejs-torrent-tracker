@@ -104,8 +104,11 @@ describe('TrackerService', function () {
     });
 
     describe("when parameters are valid", function() {
-      beforeEach(function() {
-        AnnounceParamsValidator.prototype.validate = function () {};
+      beforeEach(function () {
+        sinon.stub(AnnounceParamsValidator.prototype, 'validate');
+      });
+      afterEach(function () {
+        AnnounceParamsValidator.prototype.validate.restore();
       });
 
       describe("when `event` === stopped", function() {
@@ -159,10 +162,13 @@ describe('TrackerService', function () {
     describe("when parameters are not valid", function() {
       var message = 'my error message';
       beforeEach(function() {
-        AnnounceParamsValidator.prototype.validate = function () {
+        sinon.stub(AnnounceParamsValidator.prototype, 'validate', function() {
           throw new Error(message);
-        };
+        });
         output = trackerService.announce(params);
+      });
+      afterEach(function () {
+        AnnounceParamsValidator.prototype.validate.restore();
       });
 
       returnsError(message);
