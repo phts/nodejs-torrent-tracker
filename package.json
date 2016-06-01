@@ -10,6 +10,7 @@
     "gulp-typescript": "^2.13.0",
     "gulp-watch": "^4.3.5",
     "mocha": "^2.4.5",
+    "qs": "^6.2.0",
     "sinon": "^1.17.4",
     "typescript": "^1.8.10",
     "typings": "^1.0.4"

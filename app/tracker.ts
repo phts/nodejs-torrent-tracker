@@ -37,7 +37,7 @@ export default class Tracker {
   }
 
   private onRequest(request: http.IncomingMessage, response: http.ServerResponse) {
-    var u = url.parse(request.url, true),
+    var u = url.parse(request.url),
       data;
     if (this.options.verbose) {
       console.log('request', request.method, request.url, request.socket.remoteAddress);

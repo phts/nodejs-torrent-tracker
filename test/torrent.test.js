@@ -3,11 +3,11 @@ var expect = require('chai').expect;
 
 describe('Torrent', function () {
   var Torrent = require('../release/torrent').default,
+    infoHash = Buffer.from([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]).toString('binary'),
     torrent,
     result;
 
   describe('#getInfoHash', function () {
-    var infoHash = 'expectedInfoHash';
     beforeEach(function () {
       torrent = new Torrent(infoHash);
       result = torrent.getInfoHash();
@@ -20,7 +20,7 @@ describe('Torrent', function () {
 
   describe('#getPeers', function () {
     beforeEach(function () {
-      torrent = new Torrent('infohash');
+      torrent = new Torrent(infoHash);
     });
     describe('when this torrent has no peers', function () {
       beforeEach(function () {
@@ -52,13 +52,15 @@ describe('Torrent', function () {
   });
 
   describe('#setPeer', function () {
+    var peerId = 'peerId1';
+
     beforeEach(function () {
       torrent = new Torrent('infohash');
     });
 
     describe('when this peer not registered before', function () {
       var peer = {
-          peerId: 'peerId',
+          peerId: peerId,
           peerProps: 'peerValues'
         };
       beforeEach(function () {
@@ -72,11 +74,11 @@ describe('Torrent', function () {
 
     describe('when this peer was registered before', function () {
       var oldPeer = {
-          peerId: 'peerId',
+          peerId: peerId,
           oldPeerValues: 'oldPeerValues'
         },
         newPeer = {
-          peerId: 'peerId',
+          peerId: peerId,
           newPeerValues: 'newPeerValues'
         };
       beforeEach(function () {
@@ -92,7 +94,7 @@ describe('Torrent', function () {
 
   describe("#getComplete", function() {
     beforeEach(function () {
-      torrent = new Torrent('infohash');
+      torrent = new Torrent(infoHash);
     });
 
     describe("when torrent has no peers", function() {
@@ -123,7 +125,7 @@ describe('Torrent', function () {
 
   describe("#getIncomplete", function() {
     beforeEach(function () {
-      torrent = new Torrent('infohash');
+      torrent = new Torrent(infoHash);
     });
 
     describe("when torrent has no peers", function() {
@@ -154,12 +156,12 @@ describe('Torrent', function () {
 
   describe('#removePeer', function () {
     beforeEach(function () {
-      torrent = new Torrent('infohash');
+      torrent = new Torrent(infoHash);
     });
     describe('when the specified peer is not registered for the torrent', function () {
       beforeEach(function () {
         torrent.setPeer({peerId: 'regPeer', peerProps: 'peerProps'})
-        result = torrent.removePeer('notFoundPeer');
+        torrent.removePeer('notFoundPeer');
       });
 
       it('does nothing', function () {
@@ -172,7 +174,7 @@ describe('Torrent', function () {
       beforeEach(function () {
         torrent.setPeer({peerId: 'regPeer1', peer1Props: 'peer1Props'})
         torrent.setPeer({peerId: 'regPeer2', peer2Props: 'peer2Props'})
-        result = torrent.removePeer('regPeer1');
+        torrent.removePeer('regPeer1');
       });
 
       it('unregisters the peer from the torrent', function () {

@@ -1,3 +1,5 @@
+var qs = require('qs');
+
 function createGetRequestParams () {
   return {
     withInfoHash: function (info_hash) {
@@ -27,6 +29,9 @@ function createGetRequestParams () {
     without: function (param) {
       delete this[param];
       return this;
+    },
+    toQuery: function () {
+      return qs.stringify(this, {encode: false});
     }
   };
 }

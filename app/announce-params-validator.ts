@@ -12,13 +12,13 @@ export default class AnnounceParamsValidator {
     if (_.isNil(this.params.infoHash)) {
       throw new Error('Info hash parameter is missing');
     }
-    if (Buffer.byteLength(this.params.infoHash) !== 20) {
+    if (Buffer.byteLength(this.params.infoHash, 'binary') !== 20) {
       throw new Error('Info hash parameter is invalid');
     }
     if (_.isNil(this.params.peerId)) {
       throw new Error('Peer id parameter is missing');
     }
-    if (Buffer.byteLength(this.params.peerId) !== 20) {
+    if (Buffer.byteLength(this.params.peerId, 'binary') !== 20) {
       throw new Error('Peer id parameter is invalid');
     }
   }

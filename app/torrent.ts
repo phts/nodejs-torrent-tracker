@@ -5,7 +5,7 @@ export default class Torrent {
   private infoHash: string;
   private peers: Object;
 
-  constructor(infoHash) {
+  constructor(infoHash: string) {
     this.infoHash = infoHash;
     this.peers = {};
   }
