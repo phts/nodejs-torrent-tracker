@@ -33,12 +33,23 @@ describe('AnnounceGetRequestParams', function() {
     });
 
     describe('[ip]', function () {
-      beforeEach(function () {
-        rawParams.withIp('someIp');
-        output = new AnnounceGetRequestParams(rawParams);
+      describe("when the request doesn't contain `ip` param", function() {
+        beforeEach(function () {
+          rawParams.without('ip');
+          output = new AnnounceGetRequestParams(rawParams, 'givenIp');
+        });
+        it("returns a value given in the constructor", function() {
+          expect(output.ip).to.equal('givenIp');
+        });
       });
-      it('returns request\'s `ip` param as is', function () {
-        expect(output.ip).to.equal('someIp');
+      describe("when the request contains `ip` param", function() {
+        beforeEach(function () {
+          rawParams.withIp('someIp');
+          output = new AnnounceGetRequestParams(rawParams);
+        });
+        it('returns request\'s `ip` param as is', function () {
+          expect(output.ip).to.equal('someIp');
+        });
       });
     });
 
@@ -86,7 +97,7 @@ describe('AnnounceGetRequestParams', function() {
       });
       describe('if it is missing', function () {
         beforeEach(function () {
-          rawParams.withoutEvent();
+          rawParams.without('event');
           output = new AnnounceGetRequestParams(rawParams);
         });
         it('returns undefined event', function () {

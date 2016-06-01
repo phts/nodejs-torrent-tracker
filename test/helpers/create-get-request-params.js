@@ -24,8 +24,8 @@ function createGetRequestParams () {
       this.event = event;
       return this;
     },
-    withoutEvent: function () {
-      delete this.event;
+    without: function (param) {
+      delete this[param];
       return this;
     }
   };

@@ -9,10 +9,10 @@ export default class AnnounceGetRequestParams implements AnnounceParams {
   left: number;
   event: Event;
 
-  constructor(query) {
+  constructor(query, ip: string) {
     this.infoHash = query['info_hash'];
     this.peerId = query['peer_id'];
-    this.ip = query['ip'];
+    this.ip = query['ip'] || ip;
     this.port = parseInt(query['port'], 10);
     this.left = parseInt(query['left'], 10);
     this.event = Event[String(query['event'])];

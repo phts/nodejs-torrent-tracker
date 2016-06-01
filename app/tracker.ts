@@ -47,7 +47,7 @@ export default class Tracker {
         throw new errors.NotFoundError();
       }
       if (u.pathname === '/announce') {
-        let params = new AnnounceGetRequestParams(u.query);
+        let params = new AnnounceGetRequestParams(u.query, request.socket.remoteAddress);
         if (this.options.verbose) {
           console.log('/announce', params);
         }
