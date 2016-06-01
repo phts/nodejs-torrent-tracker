@@ -1,7 +1,9 @@
-var t = require('../release/tracker.js');
-var tracker = new t.Tracker();
+#!/usr/bin/env node
 
-tracker.start(8787);
+var Tracker = require('../release/tracker.js').default;
+var tracker = new Tracker({verbose: true});
+
+tracker.start(8686);
 
 setTimeout(function () {
   tracker.close();
