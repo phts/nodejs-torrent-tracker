@@ -2,10 +2,15 @@ var gulp = require('gulp');
 var mocha = require('gulp-mocha');
 var ts  = require('gulp-typescript');
 var tsProject = ts.createProject('tsconfig.json');
+var del = require('del');
 
 gulp.task('default', ['compile']);
 
-gulp.task('compile', function () {
+gulp.task('clean', function () {
+  return del('release');
+});
+
+gulp.task('compile', ['clean'], function () {
   return tsProject.src()
     .pipe(ts(tsProject))
     .pipe(gulp.dest('release'));
