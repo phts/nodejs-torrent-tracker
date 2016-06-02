@@ -37,7 +37,7 @@ describe('AnnounceGetRequestParams', function() {
       ]).toString('binary');
       beforeEach(function () {
         rawParams.withInfoHash('%f1%05%5b%b6%16%bb%c6%1a%23%b1%bcux%fe%e9%84%8dk%17M');
-        output = new AnnounceGetRequestParams(rawParams.toQuery());
+        output = new AnnounceGetRequestParams(rawParams.toQuery(), '11.22.33.44');
       });
 
       it('returns a binary string decoded from the query', function () {
@@ -70,7 +70,7 @@ describe('AnnounceGetRequestParams', function() {
       ]).toString('binary');
       beforeEach(function () {
         rawParams.withPeerId('-TR2840-xs32fiev0thq');
-        output = new AnnounceGetRequestParams(rawParams.toQuery());
+        output = new AnnounceGetRequestParams(rawParams.toQuery(), '11.22.33.44');
       });
 
       it('returns a binary string decoded from the query', function () {
@@ -80,21 +80,23 @@ describe('AnnounceGetRequestParams', function() {
 
     describe('[ip]', function () {
       describe("when the request doesn't contain `ip` param", function() {
+        var givenIp = '42.42.42.42'
         beforeEach(function () {
           rawParams.without('ip');
-          output = new AnnounceGetRequestParams(rawParams.toQuery(), 'givenIp');
+          output = new AnnounceGetRequestParams(rawParams.toQuery(), givenIp);
         });
         it("returns a value given in the constructor", function() {
-          expect(output.ip).to.equal('givenIp');
+          expect(output.ip.toString()).to.equal(givenIp);
         });
       });
       describe("when the request contains `ip` param", function() {
+        var reqIp = '42.42.42.42';
         beforeEach(function () {
-          rawParams.withIp('someIp');
-          output = new AnnounceGetRequestParams(rawParams.toQuery());
+          rawParams.withIp(reqIp);
+          output = new AnnounceGetRequestParams(rawParams.toQuery(), '11.22.33.44');
         });
         it('returns request\'s `ip` param as is', function () {
-          expect(output.ip).to.equal('someIp');
+          expect(output.ip.toString()).to.equal(reqIp);
         });
       });
     });
@@ -102,7 +104,7 @@ describe('AnnounceGetRequestParams', function() {
     describe('[port]', function () {
       beforeEach(function () {
         rawParams.withPort('4422');
-        output = new AnnounceGetRequestParams(rawParams.toQuery());
+        output = new AnnounceGetRequestParams(rawParams.toQuery(), '11.22.33.44');
       });
       it('returns parsed number of request\'s `port` param', function () {
         expect(output.port).to.equal(4422);
@@ -112,7 +114,7 @@ describe('AnnounceGetRequestParams', function() {
     describe('[left]', function () {
       beforeEach(function () {
         rawParams.withLeft('42');
-        output = new AnnounceGetRequestParams(rawParams.toQuery());
+        output = new AnnounceGetRequestParams(rawParams.toQuery(), '11.22.33.44');
       });
       it('returns parsed number of request\'s `left` param', function () {
         expect(output.left).to.equal(42);
@@ -124,7 +126,7 @@ describe('AnnounceGetRequestParams', function() {
         describe(`if it has \`${eventValue}\` value`, function () {
           beforeEach(function () {
             rawParams.withEvent(eventValue);
-            output = new AnnounceGetRequestParams(rawParams.toQuery());
+            output = new AnnounceGetRequestParams(rawParams.toQuery(), '11.22.33.44');
           });
           it('returns parsed event of request\'s `event` param', function () {
             expect(output.event).to.equal(Event[eventValue]);
@@ -135,7 +137,7 @@ describe('AnnounceGetRequestParams', function() {
       describe('if it has invalid value', function () {
         beforeEach(function () {
           rawParams.withEvent('invalid');
-          output = new AnnounceGetRequestParams(rawParams.toQuery());
+          output = new AnnounceGetRequestParams(rawParams.toQuery(), '11.22.33.44');
         });
         it('returns undefined event', function () {
           expect(output.event).to.be.undefined;
@@ -144,7 +146,7 @@ describe('AnnounceGetRequestParams', function() {
       describe('if it is missing', function () {
         beforeEach(function () {
           rawParams.without('event');
-          output = new AnnounceGetRequestParams(rawParams.toQuery());
+          output = new AnnounceGetRequestParams(rawParams.toQuery(), '11.22.33.44');
         });
         it('returns undefined event', function () {
           expect(output.event).to.be.undefined;

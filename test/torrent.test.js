@@ -3,6 +3,8 @@ var expect = require('chai').expect;
 
 describe('Torrent', function () {
   var Torrent = require('../release/torrent').default,
+    Address = require('../release/address').default,
+    bufferpack = require('bufferpack'),
     infoHash = Buffer.from([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]).toString('binary'),
     torrent,
     result;
@@ -22,31 +24,64 @@ describe('Torrent', function () {
     beforeEach(function () {
       torrent = new Torrent(infoHash);
     });
-    describe('when this torrent has no peers', function () {
-      beforeEach(function () {
-        torrent.peers = {};
-        result = torrent.getPeers();
-      });
+    describe('when a compact response is needed', function () {
+      var isCompact = true;
+      describe('when this torrent has no peers', function () {
+        beforeEach(function () {
+          torrent.peers = {};
+          result = torrent.getPeers(isCompact);
+        });
 
-      it('return an empty array', function () {
-        expect(result).to.eql([]);
+        it('return an empty string', function () {
+          expect(result).to.equal('');
+        });
+      });
+      describe('when this torrent has some peers', function () {
+        beforeEach(function () {
+          torrent.peers = {
+            peer1: {ip: new Address('11.22.33.44'), port: 1111},
+            peer2: {ip: new Address('11.22.33.55'), port: 2222},
+            peer3: {ip: new Address('11.22.33.66'), port: 3333}
+          };
+          result = torrent.getPeers(isCompact);
+        });
+        it('returns a string containing byte representations of IP address and port for each peer', function () {
+          var addr1num = 11*Math.pow(256, 3) + 22*Math.pow(256, 2) + 33*Math.pow(256, 1) + 44,
+            addr2num = 11*Math.pow(256, 3) + 22*Math.pow(256, 2) + 33*Math.pow(256, 1) + 55,
+            addr3num = 11*Math.pow(256, 3) + 22*Math.pow(256, 2) + 33*Math.pow(256, 1) + 66,
+            expected = `${bufferpack.pack('!lh!lh!lh', [addr1num, 1111, addr2num, 2222, addr3num, 3333])}`;
+          expect(result).to.equal(expected);
+        });
       });
     });
-    describe('when this torrent has some peers', function () {
-      beforeEach(function () {
-        torrent.peers = {
-          peer1: {peerProp1: 'peerValue1'},
-          peer2: {peerProp2: 'peerValue2'},
-          peer3: {peerProp3: 'peerValue3'}
-        };
-        result = torrent.getPeers();
+    describe('when a compact response is not needed', function () {
+      var isCompact = false;
+      describe('when this torrent has no peers', function () {
+        beforeEach(function () {
+          torrent.peers = {};
+          result = torrent.getPeers(isCompact);
+        });
+
+        it('return an empty array', function () {
+          expect(result).to.eql([]);
+        });
       });
-      it('returns an array with peer objects', function () {
-        expect(result).to.eql([
-          {peerProp1: 'peerValue1'},
-          {peerProp2: 'peerValue2'},
-          {peerProp3: 'peerValue3'}
-        ]);
+      describe('when this torrent has some peers', function () {
+        beforeEach(function () {
+          torrent.peers = {
+            peer1: {peerProp1: 'peerValue1'},
+            peer2: {peerProp2: 'peerValue2'},
+            peer3: {peerProp3: 'peerValue3'}
+          };
+          result = torrent.getPeers(isCompact);
+        });
+        it('returns an array with peer objects', function () {
+          expect(result).to.eql([
+            {peerProp1: 'peerValue1'},
+            {peerProp2: 'peerValue2'},
+            {peerProp3: 'peerValue3'}
+          ]);
+        });
       });
     });
   });

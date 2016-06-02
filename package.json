@@ -18,6 +18,8 @@
   },
   "dependencies": {
     "bencode": "^0.10.0",
+    "bufferpack": "0.0.6",
+    "ip-address": "^5.8.0",
     "lodash": "^4.11.2"
   },
   "scripts": {

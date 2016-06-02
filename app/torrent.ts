@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 import Peer from './peer';
+import * as bufferpack from 'bufferpack';
 
 export default class Torrent {
   private infoHash: string;
@@ -14,8 +15,15 @@ export default class Torrent {
     return this.infoHash;
   }
 
-  getPeers(): Peer[] {
-    return <Peer[]> _.values(this.peers);
+  getPeers(isCompact?: boolean): Peer[]|string {
+    if (isCompact) {
+      return _(this.peers)
+        .values()
+        .map((x: Peer) => bufferpack.pack('!lh', [x.ip.toNumber(), x.port]))
+        .join('');
+    } else {
+      return <Peer[]> _.values(this.peers);
+    }
   }
 
   setPeer(peer: Peer) {
@@ -23,11 +31,11 @@ export default class Torrent {
   }
 
   getComplete() {
-    return _.filter(this.getPeers(), x => x.left === 0).length;
+    return _.filter(<Peer[]>this.getPeers(), x => x.left === 0).length;
   }
 
   getIncomplete() {
-    return _.reject(this.getPeers(), x => x.left === 0).length;
+    return _.reject(<Peer[]>this.getPeers(), x => x.left === 0).length;
   }
 
   removePeer(peerId: string) {

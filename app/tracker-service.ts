@@ -24,7 +24,7 @@ export default class TrackerService {
       return {
         complete: torrent.getComplete(),
         incomplete: torrent.getIncomplete(),
-        peers: torrent.getPeers(),
+        peers: torrent.getPeers(params.isCompact),
       };
     } catch (err) {
       return {
