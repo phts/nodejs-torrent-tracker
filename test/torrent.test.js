@@ -32,25 +32,31 @@ describe('Torrent', function () {
           result = torrent.getPeers(isCompact);
         });
 
-        it('return an empty string', function () {
-          expect(result).to.equal('');
+        it('return an empty buffer', function () {
+          expect(result.length).to.equal(0);
         });
       });
       describe('when this torrent has some peers', function () {
+        var ip1 = [244, 200, 100, 44],
+          ip2 = [192, 168, 0, 12],
+          ip3 = [11, 22, 33, 66],
+          port1 = 51413,
+          port2 = 50000,
+          port3 = 1;
         beforeEach(function () {
           torrent.peers = {
-            peer1: {ip: new Address('11.22.33.44'), port: 1111},
-            peer2: {ip: new Address('11.22.33.55'), port: 2222},
-            peer3: {ip: new Address('11.22.33.66'), port: 3333}
+            peer1: {ip: new Address(ip1.join('.')), port: port1},
+            peer2: {ip: new Address(ip2.join('.')), port: port2},
+            peer3: {ip: new Address(ip3.join('.')), port: port3}
           };
           result = torrent.getPeers(isCompact);
         });
-        it('returns a string containing byte representations of IP address and port for each peer', function () {
-          var addr1num = 11*Math.pow(256, 3) + 22*Math.pow(256, 2) + 33*Math.pow(256, 1) + 44,
-            addr2num = 11*Math.pow(256, 3) + 22*Math.pow(256, 2) + 33*Math.pow(256, 1) + 55,
-            addr3num = 11*Math.pow(256, 3) + 22*Math.pow(256, 2) + 33*Math.pow(256, 1) + 66,
-            expected = `${bufferpack.pack('!lh!lh!lh', [addr1num, 1111, addr2num, 2222, addr3num, 3333])}`;
-          expect(result).to.equal(expected);
+        it('returns a buffer containing byte representations of IP address and port for each peer', function () {
+          var addr1num = Buffer.from(ip1).readInt32BE(0),
+            addr2num = Buffer.from(ip2).readInt32BE(0),
+            addr3num = Buffer.from(ip3).readInt32BE(0),
+            expected = bufferpack.pack('lHlHlH', [addr1num, port1, addr2num, port2, addr3num, port3]);
+          expect(result).to.eql(expected);
         });
       });
     });

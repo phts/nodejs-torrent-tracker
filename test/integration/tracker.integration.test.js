@@ -38,9 +38,9 @@ describe('Tracker', function () {
 
     it('registers this peer and returns a proper response', function (done) {
       http.get(url, function (response) {
-        var text = '';
+        var text = Buffer.alloc(0);
 
-        response.on('data', (chunk) => text += chunk);
+        response.on('data', (chunk) => text = Buffer.concat([text, Buffer.from(chunk, 'binary')]));
         response.on('end', function () {
           var data = bencode.decode(text);
           expect(data.complete).to.not.be.undefined;

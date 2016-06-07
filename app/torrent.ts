@@ -4,7 +4,9 @@ import * as bufferpack from 'bufferpack';
 
 export default class Torrent {
   private infoHash: string;
-  private peers: Object;
+  private peers: {
+    [peerId: string]: Peer
+  };
 
   constructor(infoHash: string) {
     this.infoHash = infoHash;
@@ -15,12 +17,14 @@ export default class Torrent {
     return this.infoHash;
   }
 
-  getPeers(isCompact?: boolean): Peer[]|string {
+  getPeers(isCompact?: boolean): Peer[]|Buffer {
     if (isCompact) {
-      return _(this.peers)
-        .values()
-        .map((x: Peer) => bufferpack.pack('!lh', [x.ip.toNumber(), x.port]))
-        .join('');
+      return <Buffer> bufferpack.pack(_.repeat('lH', _.size(this.peers)),
+        _(this.peers)
+          .values()
+          .map((x: Peer) => [x.ip.toNumber(), x.port])
+          .flatten()
+          .value());
     } else {
       return <Peer[]> _.values(this.peers);
     }
