@@ -6,6 +6,6 @@
     "bencode": "file:./vendor_definitions/bencode.d.ts",
     "bufferpack": "file:./vendor_definitions/bufferpack.d.ts",
     "ip-address": "file:./vendor_definitions/ip-address.d.ts",
-    "node-4": "registry:dt/node-4#4.0.0+20160524002506"
+    "node": "registry:dt/node#6.0.0+20160608110640"
   }
 }
