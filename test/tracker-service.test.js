@@ -63,6 +63,12 @@ describe('TrackerService', function () {
           expect(output.incomplete).to.equal('incomplete');
         });
       });
+
+      describe('[interval]', function () {
+        it('contains an interval in seconds that the client should wait between sending regular requests to the tracker', function () {
+          expect(output.interval).to.equal(300);
+        });
+      });
     }
 
     function returnsError(message) {

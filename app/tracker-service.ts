@@ -5,6 +5,7 @@ import Torrent from './torrent';
 import Event from './event';
 import AnnounceParamsValidator from './announce-params-validator';
 import AnnounceResponse from './announce-response';
+import constants from './tracker-constants';
 
 export default class TrackerService {
   private torrentStore: TorrentStore;
@@ -24,6 +25,7 @@ export default class TrackerService {
       return {
         complete: torrent.getComplete(),
         incomplete: torrent.getIncomplete(),
+        interval: constants.announceInterval,
         peers: torrent.getPeers(params.isCompact),
       };
     } catch (err) {
