@@ -1,3 +1,5 @@
+import * as _ from 'lodash';
+import * as bufferpack from 'bufferpack';
 import AnnounceParams from './announce-params';
 import TorrentStore from './torrent-store';
 import MemoryTorrentStore from './memory-torrent-store';
@@ -6,6 +8,7 @@ import Event from './event';
 import AnnounceParamsValidator from './announce-params-validator';
 import AnnounceResponse from './announce-response';
 import constants from './tracker-constants';
+import Peer from './peer';
 
 export default class TrackerService {
   private torrentStore: TorrentStore;
@@ -26,7 +29,7 @@ export default class TrackerService {
         complete: torrent.getComplete(),
         incomplete: torrent.getIncomplete(),
         interval: constants.announceInterval,
-        peers: torrent.getPeers(params.isCompact),
+        peers: this._normalizePeers(torrent.getPeers(), params.isCompact),
       };
     } catch (err) {
       return {
@@ -47,5 +50,17 @@ export default class TrackerService {
       });
     }
     this.torrentStore.saveTorrent(torrent);
+  }
+
+  private _normalizePeers(peers: Peer[], isCompact: boolean): Peer[] | Buffer {
+    if (isCompact) {
+      return <Buffer> bufferpack.pack(_.repeat('lH', _.size(peers)),
+        _(peers)
+          .map((x: Peer) => [x.ip.toNumber(), x.port])
+          .flatten()
+          .value());
+    } else {
+      return peers;
+    }
   }
 }

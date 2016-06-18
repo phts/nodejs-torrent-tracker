@@ -1,11 +1,10 @@
 import * as _ from 'lodash';
 import Peer from './peer';
-import * as bufferpack from 'bufferpack';
 
 export default class Torrent {
   private infoHash: string;
   private peers: {
-    [peerId: string]: Peer
+    [peerId: string]: Peer;
   };
 
   constructor(infoHash: string) {
@@ -17,17 +16,8 @@ export default class Torrent {
     return this.infoHash;
   }
 
-  getPeers(isCompact?: boolean): Peer[]|Buffer {
-    if (isCompact) {
-      return <Buffer> bufferpack.pack(_.repeat('lH', _.size(this.peers)),
-        _(this.peers)
-          .values()
-          .map((x: Peer) => [x.ip.toNumber(), x.port])
-          .flatten()
-          .value());
-    } else {
-      return <Peer[]> _.values(this.peers);
-    }
+  getPeers(): Peer[] {
+    return <Peer[]> _.values(this.peers);
   }
 
   setPeer(peer: Peer) {
@@ -35,11 +25,11 @@ export default class Torrent {
   }
 
   getComplete() {
-    return _.filter(<Peer[]>this.getPeers(), x => x.left === 0).length;
+    return _.filter(this.peers, x => x.left === 0).length;
   }
 
   getIncomplete() {
-    return _.reject(<Peer[]>this.getPeers(), x => x.left === 0).length;
+    return _.reject(this.peers, x => x.left === 0).length;
   }
 
   removePeer(peerId: string) {

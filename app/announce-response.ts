@@ -8,7 +8,7 @@ interface AnnounceResponse {
   'tracker id'?: string;
   'complete'?: number;
   'incomplete'?: number;
-  'peers'?: Peer[] | string;
+  'peers'?: Peer[] | Buffer;
 }
 
 export default AnnounceResponse;

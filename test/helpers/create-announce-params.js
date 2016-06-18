@@ -36,6 +36,10 @@ function createAnnounceParams () {
     withEvent: function (event) {
       this.event = Event[event];
       return this;
+    },
+    withCompact: function (isCompact) {
+      this.isCompact = isCompact;
+      return this;
     }
   };
 }
