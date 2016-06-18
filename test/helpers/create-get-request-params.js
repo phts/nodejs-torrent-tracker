@@ -26,6 +26,10 @@ function createGetRequestParams () {
       this.event = event;
       return this;
     },
+    withCompact: function (compact) {
+      this.compact = compact;
+      return this;
+    },
     without: function (param) {
       delete this[param];
       return this;

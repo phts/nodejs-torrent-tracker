@@ -153,5 +153,35 @@ describe('AnnounceGetRequestParams', function() {
         });
       });
     });
+
+    describe("[isCompact]", function() {
+      describe("when query contains `compact=1`", function() {
+        beforeEach(function () {
+          rawParams.withCompact('1');
+          output = new AnnounceGetRequestParams(rawParams.toQuery(), '11.22.33.44');
+        });
+        it('returns true', function () {
+          expect(output.isCompact).to.be.true;
+        });
+      });
+      describe("when query contains `compact=0`", function() {
+        beforeEach(function () {
+          rawParams.withCompact('0');
+          output = new AnnounceGetRequestParams(rawParams.toQuery(), '11.22.33.44');
+        });
+        it('returns false', function () {
+          expect(output.isCompact).to.be.false;
+        });
+      });
+      describe("when query doesn't contain `compact` param", function() {
+        beforeEach(function () {
+          rawParams.without('compact');
+          output = new AnnounceGetRequestParams(rawParams.toQuery(), '11.22.33.44');
+        });
+        it('returns undefined', function () {
+          expect(output.isCompact).to.be.undefined;
+        });
+      });
+    });
   });
 });

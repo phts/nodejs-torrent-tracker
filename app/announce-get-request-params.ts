@@ -34,7 +34,7 @@ function eventValueParser(value) {
 }
 
 function booleanValueParser(value) {
-  return !!value;
+  return !!numberValueParser(value);
 }
 
 function addressValueParser(value) {
