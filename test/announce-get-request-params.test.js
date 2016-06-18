@@ -34,7 +34,7 @@ describe('AnnounceGetRequestParams', function() {
         'k'.charCodeAt(0),
         0x17,
         'M'.charCodeAt(0)
-      ]).toString('binary');
+      ]);
       beforeEach(function () {
         rawParams.withInfoHash('%f1%05%5b%b6%16%bb%c6%1a%23%b1%bcux%fe%e9%84%8dk%17M');
         output = new AnnounceGetRequestParams(rawParams.toQuery(), '11.22.33.44');
@@ -67,7 +67,7 @@ describe('AnnounceGetRequestParams', function() {
         't'.charCodeAt(0),
         'h'.charCodeAt(0),
         'q'.charCodeAt(0)
-      ]).toString('binary');
+      ]);
       beforeEach(function () {
         rawParams.withPeerId('-TR2840-xs32fiev0thq');
         output = new AnnounceGetRequestParams(rawParams.toQuery(), '11.22.33.44');

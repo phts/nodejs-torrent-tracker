@@ -1,7 +1,7 @@
 import Address from './address';
 
 interface Peer {
-  peerId: string;
+  peerId: Buffer;
   ip: Address;
   port: number;
   left: number;

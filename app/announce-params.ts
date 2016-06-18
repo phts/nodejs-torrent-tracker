@@ -2,8 +2,8 @@ import Event from './event';
 import Address from './address';
 
 interface AnnounceParams {
-  infoHash: string;
-  peerId: string;
+  infoHash: Buffer;
+  peerId: Buffer;
   ip: Address;
   port: number;
   left: number;

@@ -1,18 +1,19 @@
 import TorrentStore from './torrent-store';
 import Torrent from './torrent';
+import BufferKeyedMap from './buffer-keyed-map';
 
 export default class MemoryTorrentStore implements TorrentStore {
-  private torrents: Object;
+  private torrents: BufferKeyedMap<Torrent>;
 
   constructor() {
-    this.torrents = {};
+    this.torrents = new BufferKeyedMap<Torrent>();
   }
 
-  getTorrent(infoHash: string) {
-    return this.torrents[infoHash] || new Torrent(infoHash);
+  getTorrent(infoHash: Buffer) {
+    return this.torrents.get(infoHash) || new Torrent(infoHash);
   }
 
   saveTorrent(torrent: Torrent) {
-    this.torrents[torrent.getInfoHash()] = torrent;
+    this.torrents.set(torrent.getInfoHash(), torrent);
   }
 }

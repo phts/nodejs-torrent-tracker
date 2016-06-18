@@ -2,7 +2,7 @@ import Torrent from './torrent';
 import Peer from './peer';
 
 interface TorrentStore {
-  getTorrent(infoHash: string): Torrent;
+  getTorrent(infoHash: Buffer): Torrent;
   saveTorrent(torrent: Torrent): void;
 }
 

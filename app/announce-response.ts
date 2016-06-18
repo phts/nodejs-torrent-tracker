@@ -1,5 +1,5 @@
 export interface PeersResponse {
-  'peer id': string;
+  'peer id': Buffer;
   'ip': string;
   'port': number;
 }

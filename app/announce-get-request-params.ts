@@ -12,7 +12,7 @@ var PARSERS = {
   compact: booleanValueParser,
 };
 
-function byteSequenceParser(value) {
+function byteSequenceParser(value): Buffer {
   var result = [];
   for (let i = 0; i < value.length; i++) {
     if (value[i] === '%') {
@@ -22,7 +22,7 @@ function byteSequenceParser(value) {
       result.push(value.charCodeAt(i));
     }
   }
-  return Buffer.from(result).toString('binary');
+  return Buffer.from(result);
 }
 
 function numberValueParser(value) {
@@ -42,8 +42,8 @@ function addressValueParser(value) {
 }
 
 export default class AnnounceGetRequestParams implements AnnounceParams {
-  infoHash: string;
-  peerId: string;
+  infoHash: Buffer;
+  peerId: Buffer;
   ip: Address;
   port: number;
   left: number;
