@@ -81,8 +81,24 @@ describe('TrackerService', function () {
               expect(output.peers).to.eql([]);
             });
           } else {
-            it('returns an array with peer objects', function () {
-              expect(output.peers).to.eql([peer1, peer2, peer3]);
+            it('returns an array with peer data', function () {
+              expect(output.peers).to.eql([
+                {
+                  'peer id': 'peer1',
+                  ip: '244.200.100.44',
+                  port: port1
+                },
+                {
+                  'peer id': 'peer2',
+                  ip: '192.168.0.12',
+                  port: port2
+                },
+                {
+                  'peer id': 'peer3',
+                  ip: '11.22.33.66',
+                  port: port3
+                }
+              ]);
             });
           }
         }

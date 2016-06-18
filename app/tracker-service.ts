@@ -6,7 +6,8 @@ import MemoryTorrentStore from './memory-torrent-store';
 import Torrent from './torrent';
 import Event from './event';
 import AnnounceParamsValidator from './announce-params-validator';
-import AnnounceResponse from './announce-response';
+import {AnnounceResponse} from './announce-response';
+import {PeersResponse} from './announce-response';
 import constants from './tracker-constants';
 import Peer from './peer';
 
@@ -52,7 +53,7 @@ export default class TrackerService {
     this.torrentStore.saveTorrent(torrent);
   }
 
-  private _normalizePeers(peers: Peer[], isCompact: boolean): Peer[] | Buffer {
+  private _normalizePeers(peers: Peer[], isCompact: boolean): PeersResponse[] | Buffer {
     if (isCompact) {
       return <Buffer> bufferpack.pack(_.repeat('lH', _.size(peers)),
         _(peers)
@@ -60,7 +61,13 @@ export default class TrackerService {
           .flatten()
           .value());
     } else {
-      return peers;
+      return _.map(peers, function (peer: Peer) {
+        return {
+          'peer id': peer.peerId,
+          ip: peer.ip.toString(),
+          port: peer.port,
+        };
+      });
     }
   }
 }

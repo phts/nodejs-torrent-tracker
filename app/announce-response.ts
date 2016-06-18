@@ -1,6 +1,10 @@
-import Peer from './peer';
+export interface PeersResponse {
+  'peer id': string;
+  'ip': string;
+  'port': number;
+}
 
-interface AnnounceResponse {
+export interface AnnounceResponse {
   'failure reason'?: string;
   'warning message'?: string;
   'interval'?: number;
@@ -8,7 +12,5 @@ interface AnnounceResponse {
   'tracker id'?: string;
   'complete'?: number;
   'incomplete'?: number;
-  'peers'?: Peer[] | Buffer;
+  'peers'?: PeersResponse[] | Buffer;
 }
-
-export default AnnounceResponse;
