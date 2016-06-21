@@ -1,6 +1,6 @@
 # nodejs-torrent-tracker
 
-BitTorrent tracker. My CDP project.
+BitTorrent tracker. My CDP project on Epam to learn Node.js+TypeScript.
 
 ## Used tools and technologies
 
