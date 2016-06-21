@@ -4,11 +4,15 @@ BitTorrent tracker. My CDP project.
 
 ## Used tools and technologies
 
-* Nodejs
+* Node.js
 * TypeScript
 * Mocha
 * Sinon
 * Gulp
+* [Lodash](https://lodash.com/)
+* [bufferpack](https://github.com/ryanrolds/bufferpack)
+* [node-bencode](https://github.com/themasch/node-bencode)
+* [ip-address](https://github.com/beaugunderson/ip-address)
 
 ## Specs
 
