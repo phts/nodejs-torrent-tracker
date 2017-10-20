@@ -1,14 +1,14 @@
-# nodejs-torrent-tracker
+# BitTorrent Tracker
 
-BitTorrent tracker. My CDP project on Epam to learn Node.js+TypeScript.
+BitTorrent tracker written in Node.js+TypeScript.
 
 ## Used tools and technologies
 
-* Node.js
-* TypeScript
-* Mocha
-* Sinon
-* Gulp
+* [Node.js](https://nodejs.org/en/)
+* [TypeScript](https://www.typescriptlang.org/)
+* [Mocha](https://mochajs.org/)
+* [Sinon](http://sinonjs.org/)
+* [Gulp](https://gulpjs.com/)
 * [Lodash](https://lodash.com/)
 * [bufferpack](https://github.com/ryanrolds/bufferpack)
 * [node-bencode](https://github.com/themasch/node-bencode)
