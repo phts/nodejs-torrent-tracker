@@ -1,7 +1,7 @@
 {
   "name": "nodejs-torrent-tracker",
   "version": "1.0.0",
-  "author": "Phil Tsarik",
+  "author": "Phil Tsaryk",
   "license": "MIT",
   "devDependencies": {
     "chai": "^3.5.0",
